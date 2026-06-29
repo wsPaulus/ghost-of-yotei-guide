@@ -380,6 +380,71 @@ const SPRINGS = [
   ["절벽 전망 온천","Cliff View Hot Spring","오시마 해안","최대 체력 증가",16]
 ];
 
+/* 성찰의 제단 61 (스킬 포인트). [번호, 지역, 위치, 이미지파일] 이미지=PP+altar-of-reflection-+파일 */
+const ALTARS = [
+  [1,"요테이 평원","cut through the bamboo and climb down the cliff.","1-1.jpg"],
+  [2,"요테이 평원","적 거점 정복: Saito Compound","2-1.jpg"],
+  [3,"요테이 평원","Behind a waterfall, swim through the waterfall to reach it in a hidden cave.","3-1.jpg"],
+  [4,"요테이 평원","East of Old Inn (Yotei's Shadow Inn), talk to a man at \"Lost Monk's Camp\". Then follow him to this altar. If you try to go there without his quest,...","4-1.jpg"],
+  [5,"요테이 평원","On a hill out in the open.","5-1.jpg"],
+  [6,"요테이 평원","Go through the Twisted Tree cave, climb up the rocks in the outside section behind the cave.","6-1.jpg"],
+  [7,"요테이 평원","적 거점 정복: Saito Recruitment Camp","7-1.jpg"],
+  [8,"요테이 평원","Climb down the rocks into a cave.","8-1.jpg"],
+  [9,"요테이 평원","At the end of The Blue-Flowered Cemetery.","9-1.jpg"],
+  [10,"요테이 평원","Cut through the bamboo in this bushy area to reach it.","10-1.jpg"],
+  [11,"요테이 평원","This one is tricky, it's not marked on the map. Go to Stone Spire Hideout, you will notice an unclimbable ladder at the foot of the hill. You must...","11-1.jpg"],
+  [12,"요테이 평원","적 거점 정복: Outcrop Homestead","12-1.jpg"],
+  [13,"이시카리 평원","적 거점 정복: Nishin Fishery","13-1.jpg"],
+  [14,"이시카리 평원","At a cliffside you can climb down a tree stump to reach it.","14-1.jpg"],
+  [15,"이시카리 평원","At the beach climb up the rocks.","15-1.jpg"],
+  [16,"이시카리 평원","적 거점 정복: Broken Horn Garrison","16-1.jpg"],
+  [17,"이시카리 평원","On top of a hill, climb the rocks.","17-1.jpg"],
+  [18,"이시카리 평원","적 거점 정복: Bold Kaji Forge","18-1.jpg"],
+  [19,"이시카리 평원","Swing across a gap to reach it at the end of the path.","19-1.jpg"],
+  [20,"이시카리 평원","적 거점 정복: Masked Man's Quarry","20-1.jpg"],
+  [21,"이시카리 평원","At the cliffside north of Jigoku Fortress, use the grapple point and go along the cliffs to reach the altar at the end.","21-1.jpg"],
+  [22,"이시카리 평원","On in the open on a little cliff you can swing to.","22-1.jpg"],
+  [23,"이시카리 평원","Out in the open, in front of Sensei Takahashi's Dojo.","23-1.jpg"],
+  [24,"이시카리 평원","적 거점 정복: Higashi Lumberyard","24-1.jpg"],
+  [25,"이시카리 평원","Behind a blocked path, must climb up the left side of the blocked path.","25-1.jpg"],
+  [26,"토카치 산맥","Cut through the bamboo and squeeze through a gap to enter a cave with a bear. Defeat the bear.","26-1.jpg"],
+  [27,"토카치 산맥","Out in the open.","27-1.jpg"],
+  [28,"토카치 산맥","적 거점 정복: Haranui Mill","28-1.jpg"],
+  [29,"토카치 산맥","Must squeeze through a gap in the mountainside and climb up.","29-1.jpg"],
+  [30,"토카치 산맥","적 거점 정복: Marshland Homestead","30-1.jpg"],
+  [31,"토카치 산맥","Out in the open.","31-1.jpg"],
+  [32,"토카치 산맥","Squeeze through a gap to enter a cave, then squeeze through another gap on the side of the cave.","32-1.jpg"],
+  [33,"나요로 황야","In the south of Nayoro Wilds on a hill that you can climb up.","33-1.jpg"],
+  [34,"나요로 황야","In the west of Nayoro Wilds, can use grappling hook to climb up the cliff to find the altar on top.","34-1.jpg"],
+  [35,"나요로 황야","Out in the open near a waterfall.","35-1.jpg"],
+  [36,"테시오 능선","Out in the open, on the summit of a big snowy mountain, at the only tree with leaves.","36-1.jpg"],
+  [37,"테시오 능선","적 거점 정복: Crossroads Trading Post","37-1.jpg"],
+  [38,"테시오 능선","Inside a Closed-Off Building. Must take torch from the right and light the two lanterns on the left. Don't light the ones on the right as they'll...","38-1.jpg"],
+  [39,"테시오 능선","Refer to Snow Drift Springs Hideout enemy camp. This is a hidden enemy camp. It's accessed through the Snow Drift Springs Shrine (named map...","39-1.jpg"],
+  [40,"테시오 능선","Out in the open.","40-1.jpg"],
+  [41,"테시오 능선","Inside a Closed-Off Building. When facing the front of the building, turn right and look for the lantern with an arrow pointing forward. Head in...","41-1.jpg"],
+  [42,"테시오 능선","In Snow's Blight Hideout. In the west of Teshio Ridge region, enter the \"Snow's Blight Shrine\" location, it will be marked on the map when you go...","42-1.jpg"],
+  [43,"테시오 능선","In the snow you find a rock with the yellow objects that indicate altars. Walk around the snow until the ground breaks below your feet and you fall...","43-1.jpg"],
+  [44,"테시오 능선","In Nakajima Ice Cave Hideout. This is a hidden enemy camp. It's accessed through the \"Nakajima Ice Cave\" (named map location) in the north-west of...","44-1.jpg"],
+  [45,"테시오 능선","적 거점 정복: Deserted Village","45-1.jpg"],
+  [46,"테시오 능선","Out in the open, climb a rocky wall to reach it.","46-1.jpg"],
+  [47,"테시오 능선","적 거점 정복: Soya Port","47-1.jpg"],
+  [48,"테시오 능선","적 거점 정복: Cape Inari Hideout. This is a hidden enemy camp. It's accessed through the \"Cape Inari Shrine\" (named map location) at the northernmost...","48-1.jpg"],
+  [49,"테시오 능선","At the cliffs you will see a house in the distance on the rocks. You must spin the two fox statues at the cliff to face each other, then go over...","49-1.jpg"],
+  [50,"테시오 능선","Down the cliffs.","50-1.jpg"],
+  [51,"테시오 능선","At the end of Sanctuary Grove. Enter this area through Sarufutsu Lighthouse at the cliffs and follow the path to the end until you reach the fox...","51-1.jpg"],
+  [52,"테시오 능선","In a bamboo forest. When facing the locked door of the building, turn left and enter the forest. Take the next path left and cut through the bamboo...","52-1.jpg"],
+  [53,"오시마 해안","적 거점 정복: Miyama Village","53-1.jpg"],
+  [54,"오시마 해안","On a small island in the water.","54-1.jpg"],
+  [55,"오시마 해안","적 거점 정복: Saito Artillery Camp","55-1.jpg"],
+  [56,"오시마 해안","In the outer perimeter of Matsumae Castle, inside an open temple building.","56-1.jpg"],
+  [57,"오시마 해안","적 거점 정복: Kasuage Village","57-1.jpg"],
+  [58,"오시마 해안","적 거점 정복: Iwasaki Farmstead","58-1.jpg"],
+  [59,"오시마 해안","적 거점 정복: Oiso Fishing Village","59-1.jpg"],
+  [60,"오시마 해안","At the beach climb the rocks.","60-1.jpg"],
+  [61,"오시마 해안","In the middle of the crater on top of Mount Yotei. At the western edge of Yotei Grasslands region you must find Shrine Climb: Mount Yotei. Follow...","61-1.jpg"]
+];
+
 /* ============ 혼령 / 대나무 베기 15 ============ */
 const BAMBOO = [
   [1,"스토리 (요테이 평원)","메인 '두 자루 카타나의 길' 진행 중 자동 완료","자동",PP+"bamboo-strike-1-1.jpg"],
@@ -475,7 +540,7 @@ function renderPlaces(){
   const note=document.getElementById('placeNote');
   const tbl=document.getElementById('placeTable');
   const wrap=tbl.parentElement;
-  wrap.style.display = (curSub==="altar") ? "none" : "block";
+  wrap.style.display="block";
   if(curSub==="altar"){
     intro.innerHTML=`<div class="armor-blurb"><b>스킬 포인트는 신사가 아니라 성찰의 제단(Altar of Reflection)에서</b> 얻습니다. 신사 = 메이저 호부, 제단 = 스킬 포인트로 서로 별개예요.</div>
       <div class="card" style="margin-top:12px">
@@ -486,8 +551,11 @@ function renderPlaces(){
           <li>늑대 스킬 포인트는 별도로 <b>늑대 소굴(Wolf Dens)</b> 클리어로 얻습니다.</li>
         </ul>
       </div>`;
-    tbl.innerHTML='';
-    note.innerHTML=`61개가 많아 개별 표는 생략했어요. 전체 위치와 지도는 <a href="https://www.powerpyx.com/ghost-of-yotei-all-altars-of-reflection-locations/" target="_blank" rel="noopener" style="color:var(--accent2)">PowerPyx 성찰의 제단 전체 지도</a>에서 확인하세요. 거점 22곳은 정복하면 자동 획득이라 따로 안 찾아도 됩니다.`;
+    tbl.innerHTML=`<thead><tr><th>#</th><th>지역</th><th>위치</th><th>지도</th></tr></thead><tbody>`+
+      ALTARS.map(a=>{const img=PP+"altar-of-reflection-"+a[3];
+        return `<tr><td>${a[0]}</td><td><span class="reg">${a[1]}</span></td><td>${a[2]}</td>`+
+        `<td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="제단 ${a[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
+    note.innerHTML=`총 61개 전체 목록입니다. 적 거점(22곳)은 정복하면 자동 획득이라 따로 안 찾아도 됩니다. 지도 이미지를 클릭하면 원본 위치가 열립니다.`;
     return;
   }
   if(curSub==="shrine"){
