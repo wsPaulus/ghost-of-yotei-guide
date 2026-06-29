@@ -127,6 +127,11 @@
   .map-img{display:block; width:100%; max-width:420px; border-radius:8px; border:1px solid var(--line); margin-top:4px}
   .bamboo-thumb{width:150px; height:auto; border-radius:6px; border:1px solid var(--line); display:block}
   @media(max-width:780px){ .bamboo-thumb{width:110px} }
+  td.chk-td{width:34px; text-align:center}
+  input.chk{width:18px; height:18px; cursor:pointer; accent-color:var(--accent)}
+  tr.done{opacity:.4}
+  tr.done .nm-cell{text-decoration:line-through}
+  .prog{font-size:12px; color:var(--ok); font-weight:600}
   footer{margin-top:30px; color:var(--muted); font-size:11.5px; text-align:center}
 </style>
 </head>
@@ -141,7 +146,9 @@
     <button data-pg="armor" class="active">갑옷 &amp; 호부</button>
     <button data-pg="skill">스킬트리 우선순위</button>
     <button data-pg="upgrade">방어구 강화</button>
-    <button data-pg="places">신사 &amp; 온천</button>
+    <button data-pg="altar">성찰의 제단</button>
+    <button data-pg="shrine">신사</button>
+    <button data-pg="spring">온천</button>
     <button data-pg="bamboo">혼령 (대나무 베기)</button>
   </div>
 
@@ -180,16 +187,25 @@
     <div class="note">강화하면 갑옷의 기본 수치(피해 감소/은신/원거리 등)와 <b>호부 슬롯 개방</b>이 함께 올라갑니다. 자주 입는 주력 갑옷 1~2벌을 우선 풀강하는 게 효율적입니다.</div>
   </section>
 
-  <!-- 신사 & 온천 -->
-  <section class="page" id="page-places">
-    <div class="nav" id="placeNav" style="margin-bottom:16px">
-      <button data-sub="shrine" class="active">신사 13곳 (호부)</button>
-      <button data-sub="spring">온천 16곳 (체력)</button>
-      <button data-sub="altar">성찰의 제단 (스킬 포인트)</button>
-    </div>
-    <div id="placeIntro"></div>
-    <div class="table-wrap"><table id="placeTable"></table></div>
-    <div class="note" id="placeNote"></div>
+  <!-- 성찰의 제단 -->
+  <section class="page" id="page-altar">
+    <div id="altarIntro"></div>
+    <div class="table-wrap"><table id="altarTable"></table></div>
+    <div class="note" id="altarNote"></div>
+  </section>
+
+  <!-- 신사 -->
+  <section class="page" id="page-shrine">
+    <div id="shrineIntro"></div>
+    <div class="table-wrap"><table id="shrineTable"></table></div>
+    <div class="note" id="shrineNote"></div>
+  </section>
+
+  <!-- 온천 -->
+  <section class="page" id="page-spring">
+    <div id="springIntro"></div>
+    <div class="table-wrap"><table id="springTable"></table></div>
+    <div class="note" id="springNote"></div>
   </section>
 
   <!-- 혼령 (대나무 베기) -->
@@ -534,45 +550,42 @@ function renderCats(){
   });
 }
 
-let curSub="shrine";
-function renderPlaces(){
-  const intro=document.getElementById('placeIntro');
-  const note=document.getElementById('placeNote');
-  const tbl=document.getElementById('placeTable');
-  const wrap=tbl.parentElement;
-  wrap.style.display="block";
-  if(curSub==="altar"){
-    intro.innerHTML=`<div class="armor-blurb"><b>스킬 포인트는 신사가 아니라 성찰의 제단(Altar of Reflection)에서</b> 얻습니다. 신사 = 메이저 호부, 제단 = 스킬 포인트로 서로 별개예요.</div>
-      <div class="card" style="margin-top:12px">
-        <ul style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:8px; font-size:14px">
-          <li>총 <b>61개</b>, 각 1 스킬 포인트. 제단 앞에서 <b>터치패드 아래로 스와이프해 기도</b>하면 획득.</li>
-          <li>그중 <b>22개는 요테이 식스 거점 22곳</b>을 정복하면 바로 앞에 등장. 나머지는 오픈월드에 흩어져 있고 근처에 가면 지도에 자동 표시됩니다.</li>
-          <li>기준: <b>30개</b> = 트로피, <b>60개</b> = 모든 스킬 해금(전체보다 1개 많음).</li>
-          <li>늑대 스킬 포인트는 별도로 <b>늑대 소굴(Wolf Dens)</b> 클리어로 얻습니다.</li>
-        </ul>
-      </div>`;
-    tbl.innerHTML=`<thead><tr><th>#</th><th>지역</th><th>위치</th><th>지도</th></tr></thead><tbody>`+
-      ALTARS.map(a=>{const img=PP+"altar-of-reflection-"+a[3];
-        return `<tr><td>${a[0]}</td><td><span class="reg">${a[1]}</span></td><td>${a[2]}</td>`+
-        `<td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="제단 ${a[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
-    note.innerHTML=`총 61개 전체 목록입니다. 적 거점(22곳)은 정복하면 자동 획득이라 따로 안 찾아도 됩니다. 지도 이미지를 클릭하면 원본 위치가 열립니다.`;
-    return;
-  }
-  if(curSub==="shrine"){
-    intro.innerHTML=`<div class="armor-blurb">신사 정상까지 등반 후 명상하면 <b>상급(메이저) 호부</b> 1개를 줍니다(총 13곳). <b>스킬 포인트가 아니라 호부</b>를 주는 곳이에요. 스킬 포인트 주는 곳은 위 '성찰의 제단' 탭 참고. <b>지도 이미지를 클릭</b>하면 원본 위치가 열립니다.</div>`;
-    tbl.innerHTML=`<thead><tr><th>신사</th><th>지역</th><th>도달 방법</th><th>보상 호부</th><th>지도</th></tr></thead><tbody>`+
-      SHRINES.map(s=>{const img=PP+"shrine-climb-"+s[5]+".jpg";
-        return `<tr><td><b>${s[0]}</b><br><span class="en">${s[1]}</span></td><td><span class="reg">${s[2]}</span></td><td>${s[3]}</td><td class="reward">${s[4]}</td>`+
-        `<td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="${s[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
-    note.innerHTML=`신사 한글명은 영문 의미를 옮긴 <b>번역명</b>이며 게임 내 정식 한글 표기와 다를 수 있어요(공식 한글명은 접근 가능한 출처에서 확보 못 함). 보상 호부 한글명은 일본 신 이름 음차.`;
-  }else{
-    intro.innerHTML=`<div class="armor-blurb">온천에 들어가면 <b>최대 체력 영구 증가</b>. 총 16곳. 첫 온천에서 <b>신중한 회복의 호부(Charm of Thoughtful Restoration)</b>를 얻고 이후 온천마다 그 호부가 강화됩니다. 16곳 전부 완료 시 <b>훈도시 세트</b> 획득. <b>지도 이미지를 클릭</b>하면 원본 위치가 열립니다.</div>`;
-    tbl.innerHTML=`<thead><tr><th>온천</th><th>지역</th><th>보상 / 특이사항</th><th>지도</th></tr></thead><tbody>`+
-      SPRINGS.map(s=>{const img=PP+"hot-spring-"+s[4]+".jpg";
-        return `<tr><td><b>${s[0]}</b><br><span class="en">${s[1]}</span></td><td><span class="reg">${s[2]}</span></td><td>${s[3]}</td>`+
-        `<td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="${s[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
-    note.innerHTML=`온천 한글명은 <b>번역명</b>이며(곰바위 온천만 공식 한글 확인), 게임 내 정식 표기와 다를 수 있어요.`;
-  }
+const CHK_KEY='goy-visited';
+let CHK; try{CHK=new Set(JSON.parse(localStorage.getItem(CHK_KEY)||'[]'))}catch(e){CHK=new Set()}
+function saveCHK(){try{localStorage.setItem(CHK_KEY,JSON.stringify([...CHK]))}catch(e){}}
+function chkTd(id){return `<td class="chk-td"><input type="checkbox" class="chk" data-id="${id}" ${CHK.has(id)?'checked':''}></td>`}
+function setProg(pid,ids){const el=document.getElementById(pid);if(el){const d=ids.filter(i=>CHK.has(i)).length;el.textContent=`방문 ${d}/${ids.length}`;}}
+function refreshProg(){setProg('altarProg',ALTARS.map(a=>'altar-'+a[0]));setProg('shrineProg',SHRINES.map(s=>'shrine-'+s[1]));setProg('springProg',SPRINGS.map(s=>'spring-'+s[1]));setProg('bambooProg',BAMBOO.map(b=>'bamboo-'+b[0]));}
+document.addEventListener('change',e=>{const c=e.target.closest('input.chk');if(!c)return;const id=c.dataset.id;if(c.checked)CHK.add(id);else CHK.delete(id);saveCHK();const tr=c.closest('tr');if(tr)tr.classList.toggle('done',c.checked);refreshProg();});
+
+function renderAltar(){
+  document.getElementById('altarIntro').innerHTML=`<div class="armor-blurb"><b>스킬 포인트는 신사가 아니라 성찰의 제단(Altar of Reflection)에서</b> 얻습니다. 신사 = 메이저 호부, 제단 = 스킬 포인트로 서로 별개예요. <span class="prog" id="altarProg"></span></div>
+    <div class="card" style="margin-top:12px">
+      <ul style="margin:0; padding-left:18px; display:flex; flex-direction:column; gap:8px; font-size:14px">
+        <li>총 <b>61개</b>, 각 1 스킬 포인트. 제단 앞에서 <b>터치패드 아래로 스와이프해 기도</b>하면 획득.</li>
+        <li>그중 <b>22개는 요테이 식스 거점 22곳</b>을 정복하면 바로 앞에 등장. 나머지는 오픈월드에 흩어져 있고 근처에 가면 지도에 자동 표시됩니다.</li>
+        <li>기준: <b>30개</b> = 트로피, <b>60개</b> = 모든 스킬 해금(전체보다 1개 많음).</li>
+        <li>늑대 스킬 포인트는 별도로 <b>늑대 소굴(Wolf Dens)</b> 클리어로 얻습니다.</li>
+      </ul>
+    </div>`;
+  document.getElementById('altarTable').innerHTML=`<thead><tr><th></th><th>#</th><th>지역</th><th>위치</th><th>지도</th></tr></thead><tbody>`+
+    ALTARS.map(a=>{const id='altar-'+a[0]; const img=PP+"altar-of-reflection-"+a[3];
+      return `<tr class="${CHK.has(id)?'done':''}">`+chkTd(id)+`<td>${a[0]}</td><td><span class="reg">${a[1]}</span></td><td>${a[2]}</td><td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="제단 ${a[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
+  document.getElementById('altarNote').innerHTML=`총 61개 전체 목록입니다. 적 거점(22곳)은 정복하면 자동 획득이라 따로 안 찾아도 됩니다. 왼쪽 체크박스로 방문한 곳을 표시하면 자동 저장됩니다.`;
+}
+function renderShrine(){
+  document.getElementById('shrineIntro').innerHTML=`<div class="armor-blurb">신사 정상까지 등반 후 명상하면 <b>상급(메이저) 호부</b> 1개를 줍니다(총 13곳). <b>스킬 포인트가 아니라 호부</b>를 주는 곳이에요. <b>지도 이미지를 클릭</b>하면 원본 위치가 열립니다. <span class="prog" id="shrineProg"></span></div>`;
+  document.getElementById('shrineTable').innerHTML=`<thead><tr><th></th><th>신사</th><th>지역</th><th>도달 방법</th><th>보상 호부</th><th>지도</th></tr></thead><tbody>`+
+    SHRINES.map(s=>{const id='shrine-'+s[1]; const img=PP+"shrine-climb-"+s[5]+".jpg";
+      return `<tr class="${CHK.has(id)?'done':''}">`+chkTd(id)+`<td class="nm-cell"><b>${s[0]}</b><br><span class="en">${s[1]}</span></td><td><span class="reg">${s[2]}</span></td><td>${s[3]}</td><td class="reward">${s[4]}</td><td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="${s[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
+  document.getElementById('shrineNote').innerHTML=`신사 한글명은 영문 의미를 옮긴 <b>번역명</b>이며 게임 내 정식 한글 표기와 다를 수 있어요. 보상 호부 한글명은 일본 신 이름 음차. 왼쪽 체크박스로 방문 표시(자동 저장).`;
+}
+function renderSpring(){
+  document.getElementById('springIntro').innerHTML=`<div class="armor-blurb">온천에 들어가면 <b>최대 체력 영구 증가</b>(총 16곳). 첫 온천에서 <b>신중한 회복의 호부</b>를 얻고 이후 온천마다 강화됩니다. 16곳 전부 완료 시 <b>훈도시 세트</b> 획득. <span class="prog" id="springProg"></span></div>`;
+  document.getElementById('springTable').innerHTML=`<thead><tr><th></th><th>온천</th><th>지역</th><th>보상 / 특이사항</th><th>지도</th></tr></thead><tbody>`+
+    SPRINGS.map(s=>{const id='spring-'+s[1]; const img=PP+"hot-spring-"+s[4]+".jpg";
+      return `<tr class="${CHK.has(id)?'done':''}">`+chkTd(id)+`<td class="nm-cell"><b>${s[0]}</b><br><span class="en">${s[1]}</span></td><td><span class="reg">${s[2]}</span></td><td>${s[3]}</td><td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="${s[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
+  document.getElementById('springNote').innerHTML=`온천 한글명은 <b>번역명</b>입니다(곰바위 온천만 공식 한글 확인). 왼쪽 체크박스로 방문 표시(자동 저장).`;
 }
 
 /* 네비 */
@@ -582,29 +595,27 @@ document.getElementById('nav').addEventListener('click',e=>{
   const pg=btn.dataset.pg;
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+pg));
 });
-document.getElementById('placeNav').addEventListener('click',e=>{
-  const btn=e.target.closest('button'); if(!btn) return;
-  document.querySelectorAll('#placeNav button').forEach(b=>b.classList.toggle('active',b===btn));
-  curSub=btn.dataset.sub; renderPlaces();
-});
 
 function renderBamboo(){
   document.getElementById('bambooIntro').innerHTML=
-    `대나무 베기에 성공하면 <b>혼령(Spirit) 게이지의 최대치가 영구 1칸 증가</b>합니다(특수 공격/회복에 쓰는 자원). 총 <b>15개</b>(스토리 자동 2 + 오픈월드 13). 전부 모으면 레벨업과 합쳐 최대 10칸까지 확장. 참고: "원령"이 아니라 <b>혼령</b>입니다.`;
+    `대나무 베기에 성공하면 <b>혼령(Spirit) 게이지의 최대치가 영구 1칸 증가</b>합니다(특수 공격/회복에 쓰는 자원). 총 <b>15개</b>(스토리 자동 2 + 오픈월드 13). 전부 모으면 레벨업과 합쳐 최대 10칸까지 확장. 참고: "원령"이 아니라 <b>혼령</b>입니다. <span class="prog" id="bambooProg"></span>`;
   document.getElementById('bambooTable').innerHTML=
-    `<thead><tr><th>#</th><th>지역</th><th>위치</th><th>가까운 거점</th><th>지도</th></tr></thead><tbody>`+
-    BAMBOO.map(b=>`<tr><td>${b[0]}</td><td><span class="reg">${b[1]}</span></td><td>${b[2]}</td><td>${b[3]}</td>`+
-      `<td><a href="${b[4]}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${b[4]}" alt="대나무 베기 ${b[0]} 지도" loading="lazy"></a></td></tr>`).join('')+`</tbody>`;
+    `<thead><tr><th></th><th>#</th><th>지역</th><th>위치</th><th>가까운 거점</th><th>지도</th></tr></thead><tbody>`+
+    BAMBOO.map(b=>{const id='bamboo-'+b[0];
+      return `<tr class="${CHK.has(id)?'done':''}">`+chkTd(id)+`<td>${b[0]}</td><td><span class="reg">${b[1]}</span></td><td>${b[2]}</td><td>${b[3]}</td><td><a href="${b[4]}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${b[4]}" alt="대나무 베기 ${b[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
   document.getElementById('bambooNote').innerHTML=
-    `한글 자원명은 "혼령" 또는 "의지"로 출처마다 갈립니다(인게임 UI 확인 권장). #14, #15는 출처별로 테시오 능선/오시마 해안 귀속이 갈려 지역은 참고용. 지도 이미지 클릭 시 원본(PowerPyx)이 열립니다.`;
+    `한글 자원명은 "혼령" 또는 "의지"로 갈립니다(인게임 UI 확인 권장). #14, #15는 테시오 능선/오시마 해안 귀속이 갈려 지역은 참고용. 왼쪽 체크박스로 방문 표시(자동 저장).`;
 }
 
 renderArmor();
 renderSteps(document.getElementById('skillSteps'),SKILLS,true);
 renderSteps(document.getElementById('upgradeSteps'),UPGRADE,false);
 renderCats();
-renderPlaces();
+renderAltar();
+renderShrine();
+renderSpring();
 renderBamboo();
+refreshProg();
 </script>
 </body>
 </html>
