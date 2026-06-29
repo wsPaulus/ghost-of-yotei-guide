@@ -149,6 +149,7 @@
     <button data-pg="altar">성찰의 제단</button>
     <button data-pg="shrine">신사</button>
     <button data-pg="spring">온천</button>
+    <button data-pg="reliquary">성물함 퍼즐</button>
     <button data-pg="bamboo">혼령 (대나무 베기)</button>
   </div>
 
@@ -206,6 +207,13 @@
     <div id="springIntro"></div>
     <div class="table-wrap"><table id="springTable"></table></div>
     <div class="note" id="springNote"></div>
+  </section>
+
+  <!-- 성물함 퍼즐 -->
+  <section class="page" id="page-reliquary">
+    <div id="reliquaryIntro"></div>
+    <div class="table-wrap"><table id="reliquaryTable"></table></div>
+    <div class="note" id="reliquaryNote"></div>
   </section>
 
   <!-- 혼령 (대나무 베기) -->
@@ -480,6 +488,15 @@ const BAMBOO = [
   [15,"오시마 해안","Matsumae(마츠마에 성터)","-",PP+"bamboo-strike-15.jpg"]
 ];
 
+/* 산 성물함 퍼즐 5 (지역별 1개, 나요로 제외). [번호, 한글명, 영문, 지역, 위치, 이미지, 풀이] */
+const RELIQ = [
+  [1,"용기의 성물함","Reliquary of Courage","요테이 평원","서쪽. Sarobetsu 강 따라 올라가다 강이 둘로 갈라지면 왼쪽","1-1.jpg","여우 석상 4개를 서쪽 요테이산 방향으로 돌리기"],
+  [2,"힘의 성물함","Reliquary of Strength","이시카리 평원","이시카리 평원 내","2-1.jpg","붉은 악마 가면 석상 3개는 신사 반대(아래 불 쪽), 가면 없는 여우 1개는 중앙 기둥 향하게"],
+  [3,"회복력의 성물함","Reliquary of Resilience","토카치 산맥","요테이산 동굴 내부","3-1.jpg","여우 4개 모두 중앙 기둥 향하게(요테이산 아님). 1개 돌리면 인접 2개도 함께 회전"],
+  [4,"자비의 성물함","Reliquary of Compassion","테시오 능선","Chilled Peak Shrine 등반(북서쪽에서 시작), 얼어붙은 호수에서 왼쪽 길 틈으로","4-1.jpg","먼저 여우 석상 4개 발치에 화염 화살을 쏴 눈을 녹인 뒤 회전(화염 화살은 성물함 앞에 있음)"],
+  [5,"신념의 성물함","Reliquary of Faith","오시마 해안","오시마 해안 내","5-1.jpg","여우 4개를 멀리 요테이산(북동쪽, 절벽 방향) 향하게"]
+];
+
 /* ============ 렌더링 ============ */
 let curArmor=ARMORS[0].id, curCharm=null;
 const tabsEl=document.getElementById('armorTabs');
@@ -555,7 +572,7 @@ let CHK; try{CHK=new Set(JSON.parse(localStorage.getItem(CHK_KEY)||'[]'))}catch(
 function saveCHK(){try{localStorage.setItem(CHK_KEY,JSON.stringify([...CHK]))}catch(e){}}
 function chkTd(id){return `<td class="chk-td"><input type="checkbox" class="chk" data-id="${id}" ${CHK.has(id)?'checked':''}></td>`}
 function setProg(pid,ids){const el=document.getElementById(pid);if(el){const d=ids.filter(i=>CHK.has(i)).length;el.textContent=`방문 ${d}/${ids.length}`;}}
-function refreshProg(){setProg('altarProg',ALTARS.map(a=>'altar-'+a[0]));setProg('shrineProg',SHRINES.map(s=>'shrine-'+s[1]));setProg('springProg',SPRINGS.map(s=>'spring-'+s[1]));setProg('bambooProg',BAMBOO.map(b=>'bamboo-'+b[0]));}
+function refreshProg(){setProg('altarProg',ALTARS.map(a=>'altar-'+a[0]));setProg('shrineProg',SHRINES.map(s=>'shrine-'+s[1]));setProg('springProg',SPRINGS.map(s=>'spring-'+s[1]));setProg('bambooProg',BAMBOO.map(b=>'bamboo-'+b[0]));setProg('reliquaryProg',RELIQ.map(r=>'reliquary-'+r[0]));}
 document.addEventListener('change',e=>{const c=e.target.closest('input.chk');if(!c)return;const id=c.dataset.id;if(c.checked)CHK.add(id);else CHK.delete(id);saveCHK();const tr=c.closest('tr');if(tr)tr.classList.toggle('done',c.checked);refreshProg();});
 
 function renderAltar(){
@@ -596,6 +613,13 @@ document.getElementById('nav').addEventListener('click',e=>{
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+pg));
 });
 
+function renderReliquary(){
+  document.getElementById('reliquaryIntro').innerHTML=`<div class="armor-blurb"><b>산 성물함 퍼즐(Mountain Reliquary)</b>은 지역별 1개씩 <b>총 5개</b>(나요로 황야 제외). 여우 석상을 정해진 방향으로 돌려 맞춥니다. <b>5개 모두 풀면</b> 요테이산의 호부 완전 강화 + 모자/가면/무기키트 + 트로피 획득. <span class="prog" id="reliquaryProg"></span></div>`;
+  document.getElementById('reliquaryTable').innerHTML=`<thead><tr><th></th><th>성물함</th><th>지역</th><th>위치</th><th>풀이</th><th>지도</th></tr></thead><tbody>`+
+    RELIQ.map(r=>{const id='reliquary-'+r[0]; const img=PP+"mountain-reliquary-puzzle-"+r[5];
+      return `<tr class="${CHK.has(id)?'done':''}">`+chkTd(id)+`<td class="nm-cell"><b>${r[1]}</b><br><span class="en">${r[2]}</span></td><td><span class="reg">${r[3]}</span></td><td>${r[4]}</td><td>${r[6]}</td><td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="${r[1]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
+  document.getElementById('reliquaryNote').innerHTML=`석상은 1개를 돌리면 인접 석상도 함께 회전하는 경우가 있어요. 왼쪽 체크박스로 방문 표시(자동 저장). 지도 클릭 시 원본.`;
+}
 function renderBamboo(){
   document.getElementById('bambooIntro').innerHTML=
     `대나무 베기에 성공하면 <b>혼령(Spirit) 게이지의 최대치가 영구 1칸 증가</b>합니다(특수 공격/회복에 쓰는 자원). 총 <b>15개</b>(스토리 자동 2 + 오픈월드 13). 전부 모으면 레벨업과 합쳐 최대 10칸까지 확장. 참고: "원령"이 아니라 <b>혼령</b>입니다. <span class="prog" id="bambooProg"></span>`;
@@ -614,6 +638,7 @@ renderCats();
 renderAltar();
 renderShrine();
 renderSpring();
+renderReliquary();
 renderBamboo();
 refreshProg();
 </script>
