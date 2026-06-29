@@ -468,14 +468,14 @@ function renderPlaces(){
       SHRINES.map(s=>{const img=PP+"shrine-climb-"+s[5]+".jpg";
         return `<tr><td><b>${s[0]}</b><br><span class="en">${s[1]}</span></td><td><span class="reg">${s[2]}</span></td><td>${s[3]}</td><td class="reward">${s[4]}</td>`+
         `<td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="${s[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
-    note.innerHTML=`신사 한글명은 영문 의미를 옮긴 <b>번역명</b>이며 게임 내 정식 한글 표기와 다를 수 있어요(공식 한글명은 접근 가능한 출처에서 확보 못 함). 보상 호부 한글명은 일본 신 이름 음차. 지도 출처: PowerPyx.`;
+    note.innerHTML=`신사 한글명은 영문 의미를 옮긴 <b>번역명</b>이며 게임 내 정식 한글 표기와 다를 수 있어요(공식 한글명은 접근 가능한 출처에서 확보 못 함). 보상 호부 한글명은 일본 신 이름 음차.`;
   }else{
     intro.innerHTML=`<div class="armor-blurb">온천에 들어가면 <b>최대 체력 영구 증가</b>. 총 16곳. 첫 온천에서 <b>신중한 회복의 호부(Charm of Thoughtful Restoration)</b>를 얻고 이후 온천마다 그 호부가 강화됩니다. 16곳 전부 완료 시 <b>훈도시 세트</b> 획득. <b>지도 이미지를 클릭</b>하면 원본 위치가 열립니다.</div>`;
     tbl.innerHTML=`<thead><tr><th>온천</th><th>지역</th><th>보상 / 특이사항</th><th>지도</th></tr></thead><tbody>`+
       SPRINGS.map(s=>{const img=PP+"hot-spring-"+s[4]+".jpg";
         return `<tr><td><b>${s[0]}</b><br><span class="en">${s[1]}</span></td><td><span class="reg">${s[2]}</span></td><td>${s[3]}</td>`+
         `<td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="${s[0]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
-    note.innerHTML=`온천 한글명은 <b>번역명</b>이며(곰바위 온천만 공식 한글 확인), 게임 내 정식 표기와 다를 수 있어요. 지도 출처: PowerPyx.`;
+    note.innerHTML=`온천 한글명은 <b>번역명</b>이며(곰바위 온천만 공식 한글 확인), 게임 내 정식 표기와 다를 수 있어요.`;
   }
 }
 
