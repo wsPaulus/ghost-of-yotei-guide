@@ -45,14 +45,14 @@
   @keyframes fade{from{opacity:0; transform:translateY(4px)}to{opacity:1}}
 
   .armor-tabs{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px}
-  .armor-tab{flex:1 1 150px; min-width:140px; text-align:left; cursor:pointer;
+  .armor-tab{flex:1 1 auto; min-width:max-content; text-align:left; cursor:pointer;
     background:var(--panel); border:1px solid var(--line); border-radius:12px;
     padding:13px 15px; transition:.15s; color:var(--ink)}
   .armor-tab:hover{border-color:var(--accent2)}
   .armor-tab.active{border-color:var(--accent); background:linear-gradient(180deg,var(--panel2),var(--panel));
     box-shadow:0 0 0 1px var(--accent) inset}
-  .armor-tab .nm{font-size:15.5px; font-weight:700; margin-bottom:3px}
-  .armor-tab .ds{font-size:11.5px; color:var(--muted)}
+  .armor-tab .nm{font-size:15.5px; font-weight:700; margin-bottom:3px; white-space:nowrap}
+  .armor-tab .ds{font-size:11.5px; color:var(--muted); white-space:nowrap}
 
   .layout{display:grid; grid-template-columns:1fr 1.25fr; gap:18px}
   @media(max-width:780px){ .layout{grid-template-columns:1fr} }
