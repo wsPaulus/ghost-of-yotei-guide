@@ -614,7 +614,7 @@ document.getElementById('nav').addEventListener('click',e=>{
 });
 
 function renderReliquary(){
-  document.getElementById('reliquaryIntro').innerHTML=`<div class="armor-blurb"><b>산 성물함 퍼즐(Mountain Reliquary)</b>은 지역별 1개씩 <b>총 5개</b>(나요로 황야 제외). 여우 석상을 정해진 방향으로 돌려 맞춥니다. <b>5개 모두 풀면</b> 요테이산의 호부 완전 강화 + 모자/가면/무기키트 + 트로피 획득. <span class="prog" id="reliquaryProg"></span></div>`;
+  document.getElementById('reliquaryIntro').innerHTML=`<div class="armor-blurb"><b>산 성물함 퍼즐(Mountain Reliquary)</b>은 지역별 1개씩 <b>총 5개</b>(나요로 황야 제외). 여우 석상을 정해진 방향으로 돌려 맞춥니다. <b>5개 모두 풀면</b> 요테이산의 호부 완전 강화 + 모자/가면/무기키트 + 트로피 획득. <span class="prog" id="reliquaryProg"></span><br><a href="https://www.youtube.com/watch?v=Ec_P2-4nfmo&t=110s" target="_blank" rel="noopener" style="color:var(--accent2); font-weight:600; display:inline-block; margin-top:6px">▶ 성물함 퍼즐 풀이 영상 보기</a></div>`;
   document.getElementById('reliquaryTable').innerHTML=`<thead><tr><th></th><th>성물함</th><th>지역</th><th>위치</th><th>풀이</th><th>지도</th></tr></thead><tbody>`+
     RELIQ.map(r=>{const id='reliquary-'+r[0]; const img=PP+"mountain-reliquary-puzzle-"+r[5];
       return `<tr class="${CHK.has(id)?'done':''}">`+chkTd(id)+`<td class="nm-cell"><b>${r[1]}</b><br><span class="en">${r[2]}</span></td><td><span class="reg">${r[3]}</span></td><td>${r[4]}</td><td>${r[6]}</td><td><a href="${img}" target="_blank" rel="noopener"><img class="bamboo-thumb" src="${img}" alt="${r[1]} 지도" loading="lazy"></a></td></tr>`;}).join('')+`</tbody>`;
