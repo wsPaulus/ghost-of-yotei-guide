@@ -266,6 +266,12 @@ const CHARMS = {
   last_or_heal:C("최후의 기회 호부 또는 치유의 호부",false,"방어/생존",
     "최후의 기회: 전투 중 치명타를 입으면 자동으로 치유 발동(정신력 1/3 소모). 치유의 호부: 체력 절반 이하일 때 치유 효과 강화.","토카치 산맥: 고물상 타로(Dead Man's Tree). 요테이 식스 거점 해방 시 각 거점에도 등장.",
     "타로에게서 구매 (최후의 기회 150코인 / 치유 300코인). 둘 중 하나 선택.",PP+"the-loss-we-carry-map-1.jpg",[L_TARO,L_CAM]),
+  homusubi:C("호무스비의 호부",true,"화염",
+    "적에게 가하는 화염 피해가 증가한다.","이시카리 평원: 굽이치는 눈물 신사(Winding Tears Shrine) 정상.",
+    "신사 정상 등반 후 명상.",PP+"shrine-climb-5.jpg",[L_SHR,L_CAM]),
+  fire_mastery:C("화염 숙련의 호부",false,"화염",
+    "오니의 화염(Oni's Flame)이 추가 피해를 입히고, 점화된 무기의 강공격이 인근 적에게 화염을 확산시킨다.","이시카리 평원: 이시카리 마켓 도박장(Gambling Den).",
+    "제니 하지키(동전치기) 미니게임에서 승리하면 획득.","",[L_CAM]),
   /* 진홍빛 옷 = 은신 세팅 */
   izanagi:C("이자나기의 호부",true,"은신",
     "모든 암살 성공 시 체력을 소폭 회복한다.","이시카리 평원: 선즈 피크 신사(Sun's Peak Shrine) 정상.",
@@ -314,6 +320,11 @@ const ARMORS = [
    blurb:"현상금 사냥과 도전 특화. 맞대결(스탠드오프) 시간이 늘고 처치 보상이 커지는 빌드.",
    loadout:[{c:"yotei_mountain",ess:true},{c:"father",ess:true},{c:"futsunushi",ess:true},
             {c:"takezo_defense"},{c:"confident_strike"},{c:"last_or_heal"}]},
+
+  {id:"bounty_burst",name:"현상금 달인 갑옷 (극딜)",desc:"보스전/1:1 극딜",
+   blurb:"현상금 달인 갑옷의 극딜 변형. 보스전/1:1에서 화염 피해(호무스비 + 화염 숙련)로 딜을 극대화. 일반 세팅과 슬롯 1~4를 동일하게 맞춰 헷갈리지 않게 정렬했어요.",
+   loadout:[{c:"yotei_mountain",ess:true},{c:"father",ess:true},{c:"futsunushi",ess:true},
+            {c:"takezo_defense"},{c:"homusubi"},{c:"fire_mastery"}]},
 
   {id:"higanbana",name:"피안화 갑옷",desc:"은신 갑옷 + 방어 세팅",
    blurb:"갑옷 색이 짙을수록 은신 효과가 커지는 암살용 갑옷. 영상 세팅은 타케조 방어 + 쳐내기 위주의 단단한 조합.",
