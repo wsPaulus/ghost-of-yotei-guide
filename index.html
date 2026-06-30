@@ -263,6 +263,9 @@ const CHARMS = {
   takezo_victory:C("타케조의 결연한 승리 호부",false,"방어",
     "비틀거린 적을 처치하면 체력을 소폭 회복한다.","토카치 산맥: 결투 나무. Tomamu 습지 남쪽(사이토 훈련 요새 서쪽) '습지의 결투'.",
     "타케조 제자와의 결투에서 승리 시 획득.",PP+"takezo-the-unrivalled-2-10.jpg",[L_CAM]),
+  last_or_heal:C("최후의 기회 호부 또는 치유의 호부",false,"방어/생존",
+    "최후의 기회: 전투 중 치명타를 입으면 자동으로 치유 발동(정신력 1/3 소모). 치유의 호부: 체력 절반 이하일 때 치유 효과 강화.","토카치 산맥: 고물상 타로(Dead Man's Tree). 요테이 식스 거점 해방 시 각 거점에도 등장.",
+    "타로에게서 구매 (최후의 기회 150코인 / 치유 300코인). 둘 중 하나 선택.",PP+"the-loss-we-carry-map-1.jpg",[L_TARO,L_CAM]),
   /* 진홍빛 옷 = 은신 세팅 */
   izanagi:C("이자나기의 호부",true,"은신",
     "모든 암살 성공 시 체력을 소폭 회복한다.","이시카리 평원: 선즈 피크 신사(Sun's Peak Shrine) 정상.",
@@ -310,7 +313,7 @@ const ARMORS = [
   {id:"bounty",name:"현상금 달인 갑옷",desc:"현상금/맞대결",
    blurb:"현상금 사냥과 도전 특화. 맞대결(스탠드오프) 시간이 늘고 처치 보상이 커지는 빌드.",
    loadout:[{c:"yotei_mountain",ess:true},{c:"father",ess:true},{c:"futsunushi",ess:true},
-            {c:"confident_strike"},{c:"furious_attack"},{c:"cannon_steps"}]},
+            {c:"takezo_defense"},{c:"confident_strike"},{c:"last_or_heal"}]},
 
   {id:"higanbana",name:"피안화 갑옷",desc:"은신 갑옷 + 방어 세팅",
    blurb:"갑옷 색이 짙을수록 은신 효과가 커지는 암살용 갑옷. 영상 세팅은 타케조 방어 + 쳐내기 위주의 단단한 조합.",
