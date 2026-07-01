@@ -631,11 +631,12 @@ function renderList(){
   listEl.innerHTML=`<div class="charm-tools"><button class="mini-btn" id="editToggle">${armorEdit?'\u2714 \ud3b8\uc9d1 \uc644\ub8cc':'\u270e \ud638\ubd80 \ud3b8\uc9d1'}</button>${custom?'<button class="mini-btn" id="resetArmor">\uae30\ubcf8\uac12 \ubcf5\uc6d0</button><span class="custom-tag">\ucee4\uc2a4\ud140 \uc801\uc6a9\ub428</span>':''}</div>`;
   if(armorEdit){
     const keys=Object.keys(CHARMS).sort((x,y)=>CHARMS[x].name.localeCompare(CHARMS[y].name,'ko'));
+    const used=eff.map(x=>x.c);
     eff.forEach((item,idx)=>{
       const row=document.createElement('div'); row.className='charm-edit-row';
       row.innerHTML=`<span class="slot-no">${idx+1}</span>`;
       const sel=document.createElement('select'); sel.className='charm-sel';
-      keys.forEach(k=>{const o=document.createElement('option'); o.value=k; o.textContent=CHARMS[k].name+(CHARMS[k].major?' [\uc0c1\uae09]':''); if(k===item.c)o.selected=true; sel.appendChild(o);});
+      keys.forEach(k=>{const o=document.createElement('option'); o.value=k; const usedElse=(k!==item.c)&&used.includes(k); o.textContent=CHARMS[k].name+(CHARMS[k].major?' [\uc0c1\uae09]':'')+(usedElse?' (\uc120\ud0dd\ub428)':''); if(k===item.c)o.selected=true; if(usedElse)o.disabled=true; sel.appendChild(o);});
       sel.onchange=()=>setArmorSlot(a.id,idx,sel.value);
       row.appendChild(sel); listEl.appendChild(row);
     });
