@@ -538,10 +538,10 @@ const detailEl=document.getElementById('detail');
 const AC_KEY='goy-armor-custom';
 let ACUSTOM; try{ACUSTOM=JSON.parse(localStorage.getItem(AC_KEY)||'{}')}catch(e){ACUSTOM={}}
 let armorEdit=false;
-function saveACUSTOM(){try{localStorage.setItem(AC_KEY,JSON.stringify(ACUSTOM))}catch(e){}}
+function saveACUSTOM(){try{localStorage.setItem(AC_KEY,JSON.stringify(ACUSTOM))}catch(e){}pushArmor();}
 function effLoadout(a){return ACUSTOM[a.id]?ACUSTOM[a.id].map(c=>({c})):a.loadout;}
-function setArmorSlot(armorId,idx,key){const a=ARMORS.find(x=>x.id===armorId);const cur=ACUSTOM[armorId]?ACUSTOM[armorId].slice():a.loadout.map(i=>i.c);cur[idx]=key;ACUSTOM[armorId]=cur;saveACUSTOM();renderList();}
-function resetArmor(armorId){delete ACUSTOM[armorId];saveACUSTOM();renderList();}
+function setArmorSlot(armorId,idx,key){const a=ARMORS.find(x=>x.id===armorId);const cur=ACUSTOM[armorId]?ACUSTOM[armorId].slice():a.loadout.map(i=>i.c);cur[idx]=key;ACUSTOM[armorId]=cur;saveACUSTOM();renderList();renderBlurb();}
+function resetArmor(armorId){delete ACUSTOM[armorId];saveACUSTOM();renderList();renderBlurb();}
 function renderTabs(){
   tabsEl.innerHTML='';
   ARMORS.forEach(a=>{
@@ -554,7 +554,9 @@ function renderTabs(){
 }
 function renderBlurb(){
   const a=ARMORS.find(x=>x.id===curArmor);
-  blurbEl.innerHTML=`<div class="armor-blurb">${a.blurb}${a.note?`<br><span class="tbd">${a.note}</span>`:''}</div>`;
+  let html=`<div class="armor-blurb">${a.blurb}${a.note?`<br><span class="tbd">${a.note}</span>`:''}</div>`;
+  if(ACUSTOM[a.id]){const st=buildStrengths(effLoadout(a));html+=`<div class="armor-blurb" style="border-left-color:var(--accent); margin-top:10px"><b>\u2694 \ucee4\uc2a4\ud140 \uc138\ud305 \ud2b9\uc7a5\uc810</b><br>\uad6c\uc131: ${st.roleSummary}<br>${st.themeMsg}</div>`;}
+  blurbEl.innerHTML=html;
 }
 function renderList(){
   const a=ARMORS.find(x=>x.id===curArmor);
@@ -627,7 +629,7 @@ function saveCHK(){try{localStorage.setItem(CHK_KEY,JSON.stringify([...CHK]))}ca
 function chkTd(id){return `<td class="chk-td"><input type="checkbox" class="chk" data-id="${id}" ${CHK.has(id)?'checked':''}></td>`}
 function setProg(pid,ids){const el=document.getElementById(pid);if(el){const d=ids.filter(i=>CHK.has(i)).length;el.textContent=`방문 ${d}/${ids.length}`;}}
 function refreshProg(){setProg('altarProg',ALTARS.map(a=>'altar-'+a[0]));setProg('shrineProg',SHRINES.map(s=>'shrine-'+s[1]));setProg('springProg',SPRINGS.map(s=>'spring-'+s[1]));setProg('bambooProg',BAMBOO.map(b=>'bamboo-'+b[0]));setProg('reliquaryProg',RELIQ.map(r=>'reliquary-'+r[0]));setProg('charmProg',Object.keys(CHARMS).map(k=>'charm-'+k));}
-document.addEventListener('change',e=>{const c=e.target.closest('input.chk');if(!c)return;const id=c.dataset.id;if(c.checked)CHK.add(id);else CHK.delete(id);saveCHK();const tr=c.closest('tr');if(tr)tr.classList.toggle('done',c.checked);refreshProg();});
+document.addEventListener('change',e=>{const c=e.target.closest('input.chk');if(!c)return;const id=c.dataset.id;if(c.checked)CHK.add(id);else CHK.delete(id);saveCHK();const tr=c.closest('tr');if(tr)tr.classList.toggle('done',c.checked);refreshProg();pushChecks();});
 
 function renderAltar(){
   document.getElementById('altarIntro').innerHTML=`<div class="armor-blurb"><b>스킬 포인트는 신사가 아니라 성찰의 제단(Altar of Reflection)에서</b> 얻습니다. 신사 = 메이저 호부, 제단 = 스킬 포인트로 서로 별개예요. <span class="prog" id="altarProg"></span></div>
@@ -708,6 +710,44 @@ renderSpring();
 renderReliquary();
 renderBamboo();
 refreshProg();
+
+/* ===== \ud2b9\uc7a5\uc810 \uacc4\uc0b0 ===== */
+function buildStrengths(eff){
+  const rc={}; eff.forEach(it=>{const ch=CHARMS[it.c]; if(ch)rc[ch.role]=(rc[ch.role]||0)+1;});
+  const label={"\ubc29\uc5b4":"\ubc29\uc5b4/\uc0dd\uc874","\uadfc\uc811":"\uadfc\uc811 \ub51c","\ud654\uc5fc":"\ud654\uc5fc \ub51c","\uc6d0\uac70\ub9ac":"\uc6d0\uac70\ub9ac \ub51c","\uc740\uc2e0":"\uc740\uc2e0/\uc554\uc0b4","\uc6d0\ub839":"\uc6d0\ub839/\uacf5\ud3ec","\ubc29\uc5b4/\uc0dd\uc874":"\uc0dd\uc874"};
+  const theme={"\ubc29\uc5b4":"\uccd0\ub0b4\uae30/\ud53c\ud574 \uac10\uc18c\ub85c \ubc84\ud2f0\ub294 \uc0dd\uc874","\uadfc\uc811":"\uadfc\uc811 \ucd94\uac00 \ud53c\ud574","\ud654\uc5fc":"\ud654\uc5fc \ud53c\ud574 \uadf9\ub300\ud654","\uc6d0\uac70\ub9ac":"\ud65c \uc6d0\uac70\ub9ac \ub51c","\uc740\uc2e0":"\uc740\uc2e0/\uc554\uc0b4 \uc811\uadfc","\uc6d0\ub839":"\uacf5\ud3ec \uc720\ubc1c","\ubc29\uc5b4/\uc0dd\uc874":"\uc790\uac00 \ud68c\ubcf5"};
+  const sorted=Object.entries(rc).sort((a,b)=>b[1]-a[1]);
+  const roleSummary=sorted.map(([r,n])=>(label[r]||r)+' '+n).join(' / ');
+  const seen=new Set(); const msgs=[];
+  sorted.forEach(([r])=>{const m=theme[r]||r; if(!seen.has(m)){seen.add(m);msgs.push(m);}});
+  return {roleSummary, themeMsg: msgs.join(', ')+' \uc911\uc2ec.'};
+}
+
+/* ===== Firebase \ub3d9\uae30\ud654 ===== */
+const FB='https://yotei-guide-default-rtdb.firebaseio.com/yotei';
+async function fbGet(p){try{const r=await fetch(FB+'/'+p+'.json',{cache:'no-store'});if(!r.ok)return undefined;return await r.json();}catch(e){return undefined;}}
+async function fbPut(p,v){try{await fetch(FB+'/'+p+'.json',{method:'PUT',body:JSON.stringify(v)});}catch(e){}}
+function pushChecks(){fbPut('checks',[...CHK]);}
+function pushArmor(){fbPut('armor',ACUSTOM);}
+function applyChecks(){document.querySelectorAll('input.chk').forEach(c=>{const on=CHK.has(c.dataset.id);c.checked=on;const tr=c.closest('tr');if(tr)tr.classList.toggle('done',on);});refreshProg();}
+async function syncPull(initial){
+  const rc=await fbGet('checks'); const ra=await fbGet('armor');
+  let chChanged=false, arChanged=false;
+  if(Array.isArray(rc)){
+    const next=initial?new Set([...CHK,...rc]):new Set(rc);
+    if(next.size!==CHK.size||[...next].some(x=>!CHK.has(x))){CHK=next;saveCHK();chChanged=true;}
+  }
+  if(ra&&typeof ra==='object'&&!Array.isArray(ra)){
+    const na=initial?Object.assign({},ACUSTOM,ra):ra;
+    if(JSON.stringify(na)!==JSON.stringify(ACUSTOM)){ACUSTOM=na;try{localStorage.setItem(AC_KEY,JSON.stringify(ACUSTOM))}catch(e){}arChanged=true;}
+  }
+  if(chChanged)applyChecks();
+  if(arChanged&&!armorEdit)renderArmor();
+  if(initial){pushChecks();pushArmor();}
+}
+syncPull(true);
+setInterval(()=>syncPull(false),8000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)syncPull(false);});
 </script>
 </body>
 </html>
