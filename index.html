@@ -71,6 +71,13 @@
   .charm-btn.major .dot{background:var(--gold)}
   .charm-btn .cn{flex:1; font-size:14px; font-weight:600}
   .charm-btn .role-tag{font-size:10px; color:var(--muted); border:1px solid var(--line); border-radius:20px; padding:2px 7px}
+  .charm-tools{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px}
+  .mini-btn{cursor:pointer; background:var(--panel2); border:1px solid var(--line); color:var(--ink); border-radius:8px; padding:5px 11px; font-size:12px; font-weight:600}
+  .mini-btn:hover{border-color:var(--accent2)}
+  .custom-tag{font-size:11px; color:var(--accent2); font-weight:600}
+  .charm-edit-row{display:flex; align-items:center; gap:8px; margin-bottom:8px}
+  .charm-edit-row .slot-no{width:16px; color:var(--muted); font-size:12px; text-align:center; flex:none}
+  .charm-sel{flex:1; min-width:0; background:var(--panel2); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:9px 10px; font-size:14px}
   .badge-ess{font-size:10px; font-weight:700; color:#1a1510; background:var(--ess); padding:2px 7px; border-radius:20px; letter-spacing:.5px}
 
   #detail .empty{color:var(--muted); font-size:14px; text-align:center; padding:40px 10px}
@@ -528,13 +535,20 @@ const blurbEl=document.getElementById('armorBlurb');
 const listEl=document.getElementById('charmList');
 const detailEl=document.getElementById('detail');
 
+const AC_KEY='goy-armor-custom';
+let ACUSTOM; try{ACUSTOM=JSON.parse(localStorage.getItem(AC_KEY)||'{}')}catch(e){ACUSTOM={}}
+let armorEdit=false;
+function saveACUSTOM(){try{localStorage.setItem(AC_KEY,JSON.stringify(ACUSTOM))}catch(e){}}
+function effLoadout(a){return ACUSTOM[a.id]?ACUSTOM[a.id].map(c=>({c})):a.loadout;}
+function setArmorSlot(armorId,idx,key){const a=ARMORS.find(x=>x.id===armorId);const cur=ACUSTOM[armorId]?ACUSTOM[armorId].slice():a.loadout.map(i=>i.c);cur[idx]=key;ACUSTOM[armorId]=cur;saveACUSTOM();renderList();}
+function resetArmor(armorId){delete ACUSTOM[armorId];saveACUSTOM();renderList();}
 function renderTabs(){
   tabsEl.innerHTML='';
   ARMORS.forEach(a=>{
     const b=document.createElement('button');
     b.className='armor-tab'+(a.id===curArmor?' active':'');
     b.innerHTML=`<div class="nm">${a.name}</div><div class="ds">${a.desc}</div>`;
-    b.onclick=()=>{curArmor=a.id; curCharm=null; renderArmor();};
+    b.onclick=()=>{curArmor=a.id; curCharm=null; armorEdit=false; renderArmor();};
     tabsEl.appendChild(b);
   });
 }
@@ -544,16 +558,32 @@ function renderBlurb(){
 }
 function renderList(){
   const a=ARMORS.find(x=>x.id===curArmor);
-  listEl.innerHTML='';
-  a.loadout.forEach(item=>{
-    const ch=CHARMS[item.c]; if(!ch) return;
-    const b=document.createElement('button');
-    b.className='charm-btn'+(ch.major?' major':'')+(item.c===curCharm?' active':'');
-    b.innerHTML=`<span class="dot"></span><span class="cn">${ch.name}</span>`+
-      (item.ess?`<span class="badge-ess">필</span>`:'')+`<span class="role-tag">${ch.role}</span>`;
-    b.onclick=()=>{curCharm=item.c; renderDetail();};
-    listEl.appendChild(b);
-  });
+  const custom=!!ACUSTOM[a.id];
+  const eff=effLoadout(a);
+  listEl.innerHTML=`<div class="charm-tools"><button class="mini-btn" id="editToggle">${armorEdit?'\u2714 \ud3b8\uc9d1 \uc644\ub8cc':'\u270e \ud638\ubd80 \ud3b8\uc9d1'}</button>${custom?'<button class="mini-btn" id="resetArmor">\uae30\ubcf8\uac12 \ubcf5\uc6d0</button><span class="custom-tag">\ucee4\uc2a4\ud140 \uc801\uc6a9\ub428</span>':''}</div>`;
+  if(armorEdit){
+    const keys=Object.keys(CHARMS).sort((x,y)=>CHARMS[x].name.localeCompare(CHARMS[y].name,'ko'));
+    eff.forEach((item,idx)=>{
+      const row=document.createElement('div'); row.className='charm-edit-row';
+      row.innerHTML=`<span class="slot-no">${idx+1}</span>`;
+      const sel=document.createElement('select'); sel.className='charm-sel';
+      keys.forEach(k=>{const o=document.createElement('option'); o.value=k; o.textContent=CHARMS[k].name+(CHARMS[k].major?' [\uc0c1\uae09]':''); if(k===item.c)o.selected=true; sel.appendChild(o);});
+      sel.onchange=()=>setArmorSlot(a.id,idx,sel.value);
+      row.appendChild(sel); listEl.appendChild(row);
+    });
+  } else {
+    eff.forEach(item=>{
+      const ch=CHARMS[item.c]; if(!ch) return;
+      const b=document.createElement('button');
+      b.className='charm-btn'+(ch.major?' major':'')+(item.c===curCharm?' active':'');
+      b.innerHTML=`<span class="dot"></span><span class="cn">${ch.name}</span>`+
+        ((item.ess&&!custom)?`<span class="badge-ess">\ud544</span>`:'')+`<span class="role-tag">${ch.role}</span>`;
+      b.onclick=()=>{curCharm=item.c; renderDetail();};
+      listEl.appendChild(b);
+    });
+  }
+  const et=document.getElementById('editToggle'); if(et)et.onclick=()=>{armorEdit=!armorEdit; renderList();};
+  const rb=document.getElementById('resetArmor'); if(rb)rb.onclick=()=>{armorEdit=false; resetArmor(a.id);};
 }
 function renderDetail(){
   renderList();
