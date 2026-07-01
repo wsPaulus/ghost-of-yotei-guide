@@ -756,7 +756,7 @@ function renderBamboo(){
 
 function renderCharms(){
   const ro={"방어":1,"방어/생존":2,"근접":3,"화염":4,"원거리":5,"은신":6,"원령":7,"생존":8,"유틸":9};
-  const entries=Object.entries(CHARMS).sort((a,b)=>((ro[a[1].role]||9)-(ro[b[1].role]||9))||a[1].name.localeCompare(b[1].name,'ko'));
+  const entries=Object.entries(CHARMS).sort((a,b)=>a[1].name.localeCompare(b[1].name,'ko'));
   document.getElementById('charmsIntro').innerHTML=`<div class="armor-blurb">가이드 세팅에 쓰이는 호부 <b>${entries.length}종</b>을 한글판 기준으로 한 곳에 정리했습니다. 등급/역할/특징(효과)/획득처/지도. 체크박스로 보유한 호부를 표시하면 저장됩니다. <span class="prog" id="charmProg"></span></div>`;
   document.getElementById('charmsTable').innerHTML=`<thead><tr><th></th><th>호부</th><th>역할</th><th>특징 (효과)</th><th>획득 위치 / 방법</th><th>지도</th></tr></thead><tbody>`+
     entries.map(([key,c])=>{const id='charm-'+key;
